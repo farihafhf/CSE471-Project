@@ -4,6 +4,49 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from .forms import ProfileForm
+from .models import UserProfile
+
+@login_required
+def edit_profile(request):
+    try:
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.userprofile)
+    except User.userprofile.RelatedObjectDoesNotExist:
+        # Create a new profile for the user if it doesn't exist
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_profile = form.save(commit=False)  # Avoid saving twice
+            user_profile.user = request.user
+            user_profile.save()  # Now save the profile with the user association
+            messages.success(request, 'Profile created and updated successfully')
+            return redirect('dashboard')
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully')
+            return redirect('dashboard')
+    else:
+        form = ProfileForm(instance=request.user.userprofile)
+    return render(request, 'authentication/edit_profile.html', {'form': form})
+
+@login_required
+def view_profile(request):
+    try:
+        user_profile = request.user.userprofile
+        if not user_profile.profile_pic:
+        # If not, use the default profile picture
+            user_profile.profile_pic = 'default_profile_pic/default.jpg'
+    except User.userprofile.DoesNotExist:
+        # Handle the case where the user doesn't have a profile yet (optional)
+        messages.info(request, 'You haven\'t created a profile yet.')
+        return redirect('create_profile')  # Redirect to profile creation view if desired
+    
+    # # Print statements for debugging
+    # print(f"User profile retrieved: {user_profile}")
+    # print(f"Profile picture URL: {user_profile.profile_picture.url}")   
+    
+    return render(request, 'authentication/view_profile.html', {'user_profile': user_profile})
 
 from tasks.models import Project
 # Create your views here.
