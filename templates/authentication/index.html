@@ -10,14 +10,13 @@
 <body>
     <div class="container">
         {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <div class="alert alert-dismissible alert-info">
             <strong>Message:</strong> {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            
         </div>
         {% endfor %}
-        <h1 class="mb-4">Welcome to Authentication</h1>
+        <br>
+        <h1 class="mb-4"><strong>GetItDone</strong></h1>
         <button class="btn btn-primary me-2"><a href="/signup" class="text-white text-decoration-none">Sign Up</a></button>
         <button class="btn btn-secondary"><a href="/signin" class="text-white text-decoration-none">Sign In</a></button>
     </div>

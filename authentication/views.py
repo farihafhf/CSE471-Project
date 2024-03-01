@@ -3,6 +3,9 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
+from tasks.models import Project
 # Create your views here.
 def home(request):
     return render(request, "authentication/index.html")
@@ -54,8 +57,7 @@ def signin(request):
 
         if user is not None:
             login(request,user)
-            fname=user.first_name
-            return render(request,"authentication/dashboard.html",{'fname':fname})
+            return redirect('dashboard')
 
         else:
             messages.error(request,"Wrong Username or Password")
@@ -66,3 +68,9 @@ def signout(request):
     logout(request)
     messages.success(request,"Logged out successfully")
     return redirect("home")
+
+@login_required
+def dashboard(request):
+    fname = request.user.first_name
+    user_projects = Project.objects.filter(created_by=request.user)
+    return render(request, 'authentication/dashboard.html', {'user_projects': user_projects,'fname': fname})
