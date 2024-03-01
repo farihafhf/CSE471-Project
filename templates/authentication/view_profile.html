@@ -1,0 +1,20 @@
+<!-- authentication/templates/authentication/view_profile.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile</h1>
+    <div>
+        <img src="{{ user_profile.profile_pic.url }}" alt="Profile Picture" width="100">
+    </div>
+    <p><strong>Username:</strong> {{ user_profile.user.username }}</p>
+    <p><strong>Email:</strong> {{ user_profile.user.email }}</p>
+    <p><strong>Bio:</strong> {{ user_profile.bio }}</p>
+    <p><strong>Interests:</strong> {{ user_profile.interests }}</p>
+</body>
+</html>
