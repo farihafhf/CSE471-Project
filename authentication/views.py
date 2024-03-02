@@ -117,3 +117,14 @@ def dashboard(request):
     fname = request.user.first_name
     user_projects = Project.objects.filter(created_by=request.user)
     return render(request, 'authentication/dashboard.html', {'user_projects': user_projects,'fname': fname})
+def contact(request):
+    if request.method=='POST':
+        message_name=request.POST['Reset Password']
+        message_email=request.POST['message-email']
+        message_name=request.POST['Hi use this code to reset password']
+       
+        send_mail(message-name,
+        message,
+        settings.EMAIL_HOST_USER ,
+        [profile.mail],
+        )

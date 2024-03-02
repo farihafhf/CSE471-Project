@@ -19,24 +19,29 @@
     <div class="container">
         {% for task in project_tasks %}
         <div class="btn-group-vertical">
-            <a href="{% url 'project_page' project_id=project.project_id %}" button type="button" class="btn btn-outline-info">{{ task.task_name }}</a>
-            
+           
+            <button type="button" class="btn btn-outline-info">
+                <a href="{% url 'task_page' %}">Task Page</a>{{ task.task_name }}</button>
+           
+
             <form method="post" action="{% url 'delete_task' task_id=task.task_id %}" style="margin-left: auto;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-primary" style="font-size: 0.8em;">🗑️</button>
-            </form>
-        
+               
+            </form>  
+           
+       
         </div><br><br>
         {% empty %}
-            No Existing Project.
+            <!-- No Existing Project. -->
         {% endfor %}
         <br>
         <form method="post" action="{% url 'create_task' project_id=project.project_id %}">
             {% csrf_token %}
-            <input type="text" name="task_name" placeholder="New Task" required>
-            <button type="submit" class="btn btn-success">Create New Task</button>
-        </form>
-    </div>
+            <input type="text" name="task_name" placeholder="Add Task Name" required>
+
+           
+           
 
 </body>
 </html>
