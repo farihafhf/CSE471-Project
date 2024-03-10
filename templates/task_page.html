@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task List</title>
+    <style>
+       
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="datetime-local"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task Details</h1>
+    <!-- <ul>
+        {% for task in tasks %}
+            <li>{{ task.title }} - {{ task.description }} - {{ task.due_date }} - {{ task.priority }}</li>
+        {% endfor %}
+    </ul>
+     -->
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <!-- <label for="title">Title:</label>
+            <input type="text" id="title" name="title" > -->
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" ></textarea>
+        </div>
+        <div>
+            <label for="due_date">Due Date:</label>
+            <input type="datetime-local" id="due_date" name="due_date" >
+        </div>
+        <div>
+            <label for="priority">Priority:</label>
+            <select id="priority" name="priority" >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Add Task details</button>
+    </form>
+</body>
+</html>

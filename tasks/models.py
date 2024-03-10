@@ -21,7 +21,15 @@ class Task(models.Model):
     task_name = models.CharField(max_length=100)
     parent_project = models.ForeignKey(Project, on_delete=models.CASCADE)
     completion = models.BooleanField(default=False)  
+    PRIORITY_CHOICES = (
+        ('Low', 'Low'),
+        ('Medium', 'Medium'),
+        ('High', 'High'),
+    )
 
+  
+
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='Low')
 
 
 

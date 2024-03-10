@@ -40,3 +40,7 @@ def delete_task(request, task_id):
     if request.method == 'POST':
         task.delete()
     return redirect('project_page', project_id=task.parent_project_id)
+
+def task_page(request):
+   
+    return render(request, 'task_page.html')
