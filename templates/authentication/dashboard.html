@@ -39,7 +39,12 @@
             <input type="text" name="project_name" placeholder="New Project Name" required>
             <button type="submit" class="btn btn-success">Create Project</button>
         </form>
+        <br>
         <button type="button" class="btn btn-secondary top-right-button"><a href="/signout" style="color: white;">Sign Out</a></button>
+        <br>
+        <button type="button" class="btn btn-light"><a href="{% url 'edit_profile' %}" style="color: black;">Edit Profile</a></button>
+        <br>
+        <button type="button" class="btn btn-light"><a href="{% url 'view_profile' %}" style="color: black;">View Profile</a></button>
     </div>
 </body>
 </html>
