@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -35,21 +35,17 @@ def view_profile(request):
     try:
         user_profile = request.user.userprofile
         if not user_profile.profile_pic:
-        # If not, use the default profile picture
+            # If not, use the default profile picture
             user_profile.profile_pic = 'default_profile_pic/default.jpg'
-    except User.userprofile.DoesNotExist:
+    except UserProfile.DoesNotExist:
         # Handle the case where the user doesn't have a profile yet (optional)
         messages.info(request, 'You haven\'t created a profile yet.')
         return redirect('create_profile')  # Redirect to profile creation view if desired
     
-    # # Print statements for debugging
-    # print(f"User profile retrieved: {user_profile}")
-    # print(f"Profile picture URL: {user_profile.profile_picture.url}")   
-    
     return render(request, 'authentication/view_profile.html', {'user_profile': user_profile})
 
+
 from tasks.models import Project
-# Create your views here.
 def home(request):
     return render(request, "authentication/index.html")
 
@@ -85,16 +81,16 @@ def signup(request):
         myuser.last_name = lname
         myuser.save()
         messages.success(request, "Account created successfully!")
-        return redirect('signin')  # Redirect to sign-in page after successful sign-up
+        return redirect('home')  # Redirect to sign-in page after successful sign-up
 
 
-    return render(request, "authentication/signup.html")
+    return render(request, "authentication/index.html")
 
 def signin(request):
 
     if request.method=="POST":
-        username = request.POST["username"]
-        pass1 = request.POST["pass1"]
+        username = request.POST["login-username"]
+        pass1 = request.POST["login-pass1"]
 
         user=authenticate(username=username, password=pass1)
 
@@ -103,9 +99,9 @@ def signin(request):
             return redirect('dashboard')
 
         else:
-            messages.error(request,"Wrong Username or Password")
+            messages.error(request,"  Wrong Username or Password  ")
             return redirect('home')
-    return render(request, "authentication/signin.html")
+    return render(request, "authentication/index.html")
 
 def signout(request):
     logout(request)
@@ -117,6 +113,7 @@ def dashboard(request):
     fname = request.user.first_name
     user_projects = Project.objects.filter(created_by=request.user)
     return render(request, 'authentication/dashboard.html', {'user_projects': user_projects,'fname': fname})
+
 def contact(request):
     if request.method=='POST':
         message_name=request.POST['Reset Password']
@@ -128,3 +125,22 @@ def contact(request):
         settings.EMAIL_HOST_USER ,
         [profile.mail],
         )
+
+
+
+def back_to_dashboard(request):
+    return redirect('dashboard')
+
+def search_by_username(request):
+    if 'username' in request.GET:
+        username = request.GET['username']
+        users = User.objects.filter(username__icontains=username)
+    else:
+        users = User.objects.none()  # Return an empty queryset if no username provided
+    return render(request, 'search_results.html', {'users': users})
+
+def view_profile_from_search(request, username):
+    user_profile = get_object_or_404(UserProfile, user__username=username)
+    return render(request, 'authentication/view_profile.html', {'user_profile': user_profile})
+
+
