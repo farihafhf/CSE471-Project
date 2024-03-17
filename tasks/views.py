@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Project, Task
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from .forms import TimerForm
 
 @login_required
 def create_project(request):
@@ -41,6 +42,39 @@ def delete_task(request, task_id):
         task.delete()
     return redirect('project_page', project_id=task.parent_project_id)
 
+
 def task_page(request):
-   
-    return render(request, 'task_page.html')
+    # Retrieve tasks from the database or create a queryset as needed
+    tasks = Task.objects.all()
+    form = TimerForm()
+    return render(request, 'task_page.html', {'tasks': tasks})
+
+    context = {
+        'tasks': tasks,
+        'form': form,
+    }
+    return render(request, 'timer.html', context)
+
+
+def start_timer(request, task_id):
+    task = Task.objects.get(id=task_id)
+    # Start the timer logic here
+    return redirect('task_page.html')
+
+def stop_timer(request, task_id):
+    task = Task.objects.get(id=task_id)
+    # Stop the timer logic here
+    return redirect('task_page.html')
+
+def reset_timer(request, task_id):
+    task = Task.objects.get(id=task_id)
+    # Reset the timer logic here
+    return redirect('task_page.html')
+
+def pause_timer(request, task_id):
+    task = Task.objects.get(id=task_id)
+    # Pause the timer logic here
+    return redirect('task_page.html')
+
+
+

@@ -34,6 +34,120 @@
             background-color: #0056b3;
         }
     </style>
+
+    <meta charset="UTF-8">
+    <title>Task Timer</title>
+    <style>
+        /* CSS for timer styling */
+        #timer-container {
+            width: 300px;
+            height: 150px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 4px solid #200011;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #timer {
+            font-size: 36px;
+            font-weight: bold;
+            color: #b539f3; /* Purple color */
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 0px 30px;
+            background-color: #9900ff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #160202;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+    <script>
+        // JavaScript for timer functionalities
+        var timerInterval;
+        var seconds = 0;
+        var minutes = 0;
+        var hours = 0;
+
+        function setTimer() {
+            var userInput = prompt("Enter time in minutes:");
+            if (userInput !== null) {
+                var inputMinutes = parseInt(userInput);
+                if (!isNaN(inputMinutes) && inputMinutes > 0) {
+                    minutes = inputMinutes % 60;
+                    hours = Math.floor(inputMinutes / 60);
+                    updateTimerDisplay();
+                } else {
+                    alert("Invalid input. Please enter a valid number of minutes.");
+                }
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            updateTimerDisplay();
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function updateTimer() {
+            seconds--;
+            if (seconds < 0) {
+                if (minutes === 0 && hours === 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timer').innerText = "Timeout!";
+                    return;
+                } else {
+                    seconds = 59;
+                    if (minutes > 0) {
+                        minutes--;
+                    } else {
+                        minutes = 59;
+                        if (hours > 0) {
+                            hours--;
+                        }
+                    }
+                }
+            }
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            var display = pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+            document.getElementById('timer').innerText = display;
+        }
+
+        function pad(num) {
+            return (num < 10 ? '0' : '') + num;
+        }
+    </script>
 </head>
 <body>
     <h1>Task Details</h1>
@@ -67,5 +181,15 @@
         </div>
         <button type="submit" class="btn btn-success">Add Task details</button>
     </form>
+
+    <h1 align = 'center'>Task Timer</h1>
+    <!-- Timer container -->
+    <div id="timer-container">
+        <div id="timer">00:00:00</div>
+        <button onclick="setTimer()">Set</button>
+        <button onclick="startTimer()">Start</button>
+        <button onclick="pauseTimer()">Pause</button>
+        <button onclick="resetTimer()">Reset</button>
+    </div>
 </body>
 </html>
