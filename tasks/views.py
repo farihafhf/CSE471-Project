@@ -36,6 +36,18 @@ def create_task(request, project_id):
     return render(request, 'create_task.html', {'project': project})
 
 @login_required
+def delete_project(request, project_id):
+    try:
+        project = Project.objects.get(pk=project_id)
+    except Project.DoesNotExist:
+        raise Http404("Project does not exist")
+
+    if request.method == 'POST':
+        project.delete()
+    return redirect('dashboard')
+
+
+@login_required
 def delete_task(request, task_id):
     task = Task.objects.get(pk=task_id)    #pk=primary key
     if request.method == 'POST':
@@ -78,3 +90,8 @@ def pause_timer(request, task_id):
 
 
 
+
+    return render(request, 'task_page.html')
+
+def back_to_dashboard(request):
+    return redirect('dashboard')

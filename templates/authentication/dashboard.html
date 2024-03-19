@@ -20,16 +20,22 @@
     </style>
 </head>
 <body>
+
     <div class="container">
         <br>
-        <h4>You're successfully logged in.</h4>
         <h3>Welcome to Your Dashboard</h3>
         <h3>Hello {{ fname }}!</h3>
         <br>
-
+        
         {% for project in user_projects %}
         <div class="btn-group-vertical">
             <br><a href="{% url 'project_page' project_id=project.project_id %}" class="btn btn-primary" style="color: white;">{{ project.project_name }}</a>
+        </div>
+        <form method="post" action="{% url 'delete_project' project_id=project.project_id %}" style="margin-left: auto;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-primary" style="font-size: 0.8em;">🗑️</button>
+           
+        </form>
         {% empty %}
             No Existing Project.
         {% endfor %}
@@ -39,9 +45,13 @@
             <input type="text" name="project_name" placeholder="New Project Name" required>
             <button type="submit" class="btn btn-success">Create Project</button>
         </form>
+        <br>
         <button type="button" class="btn btn-secondary top-right-button"><a href="/signout" style="color: white;">Sign Out</a></button>
-        <a href="{% url 'edit_profile' %}">Edit Profile</a>
-        <a href="{% url 'view_profile' %}">View Profile</a>
+        <br>
+        <button type="button" class="btn btn-light"><a href="{% url 'edit_profile' %}" style="color: black;">Edit Profile</a></button>
+        <br>
+        <button type="button" class="btn btn-light"><a href="{% url 'view_profile' %}" style="color: black;">View Profile</a></button>
     </div>
+    
 </body>
 </html>
