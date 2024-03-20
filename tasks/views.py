@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Project, Task
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from .forms import TimerForm
-
+from django.contrib.auth.models import User
+from django.contrib import messages
 @login_required
 def create_project(request):
     if request.method == 'POST':
@@ -46,52 +47,62 @@ def delete_project(request, project_id):
         project.delete()
     return redirect('dashboard')
 
-
 @login_required
 def delete_task(request, task_id):
-    task = Task.objects.get(pk=task_id)    #pk=primary key
+    task = Task.objects.get(pk=task_id)
     if request.method == 'POST':
         task.delete()
     return redirect('project_page', project_id=task.parent_project_id)
 
-
+@login_required
 def task_page(request):
-    # Retrieve tasks from the database or create a queryset as needed
     tasks = Task.objects.all()
     form = TimerForm()
-    return render(request, 'task_page.html', {'tasks': tasks})
+    context = {'tasks': tasks, 'form': form}
+    return render(request, 'task_page.html', context)
 
-    context = {
-        'tasks': tasks,
-        'form': form,
-    }
-    return render(request, 'timer.html', context)
-
-
+@login_required
 def start_timer(request, task_id):
-    task = Task.objects.get(id=task_id)
-    # Start the timer logic here
-    return redirect('task_page.html')
+    # Start timer logic
+    return redirect('task_page')
 
+@login_required
 def stop_timer(request, task_id):
-    task = Task.objects.get(id=task_id)
-    # Stop the timer logic here
-    return redirect('task_page.html')
+    # Stop timer logic
+    return redirect('task_page')
 
+@login_required
 def reset_timer(request, task_id):
-    task = Task.objects.get(id=task_id)
-    # Reset the timer logic here
-    return redirect('task_page.html')
+    # Reset timer logic
+    return redirect('task_page')
 
+@login_required
 def pause_timer(request, task_id):
-    task = Task.objects.get(id=task_id)
-    # Pause the timer logic here
-    return redirect('task_page.html')
+    # Pause timer logic
+    return redirect('task_page')
 
-
-
-
-    return render(request, 'task_page.html')
-
+@login_required
 def back_to_dashboard(request):
+    return redirect('dashboard')
+
+@login_required
+def dashboard(request):
+    fname = request.user.first_name
+    user_projects = Project.objects.filter(created_by=request.user)
+    return render(request, 'authentication/dashboard.html', {'user_projects': user_projects,'fname': fname})
+
+@login_required
+def add_collaborator(request, project_id, username):
+    project = get_object_or_404(Project, project_id=project_id)
+    collaborator = get_object_or_404(User, username=username)
+    project.collaborators.add(collaborator)
+
+    messages.success(request, f"{collaborator.username} added as a collaborator to the project.")
+    return redirect('project_page', project_id=project_id)
+
+@login_required
+def remove_collaborator(request, project_id, username):
+    project = get_object_or_404(Project, id=project_id)
+    collaborator = get_object_or_404(User, username=username)
+    project.collaborators.remove(collaborator)
     return redirect('dashboard')
