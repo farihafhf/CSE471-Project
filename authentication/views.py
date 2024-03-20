@@ -120,11 +120,11 @@ def contact(request):
         message_email=request.POST['message-email']
         message_name=request.POST['Hi use this code to reset password']
        
-        send_mail(message-name,
-        message,
-        settings.EMAIL_HOST_USER ,
-        [profile.mail],
-        )
+        # send_mail(message-name,
+        # message,
+        # settings.EMAIL_HOST_USER ,
+        # [profile.mail],
+        # )
 
 
 
