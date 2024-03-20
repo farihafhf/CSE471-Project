@@ -132,12 +132,15 @@ def back_to_dashboard(request):
     return redirect('dashboard')
 
 def search_by_username(request):
+    project_id = request.GET.get('project_id')  # Get the project_id from the request
+
     if 'username' in request.GET:
         username = request.GET['username']
         users = User.objects.filter(username__icontains=username)
     else:
         users = User.objects.none()  # Return an empty queryset if no username provided
-    return render(request, 'search_results.html', {'users': users})
+
+    return render(request, 'search_results.html', {'users': users, 'project_id': project_id})
 
 def view_profile_from_search(request, username):
     user_profile = get_object_or_404(UserProfile, user__username=username)

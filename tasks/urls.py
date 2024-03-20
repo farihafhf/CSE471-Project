@@ -14,4 +14,6 @@ urlpatterns = [
     path('task/<int:task_id>/pause/', views.pause_timer, name='pause_timer'),
     path('delete_project/<int:project_id>/', views.delete_project, name='delete_project'),
     path('back_to_dashboard/', views.back_to_dashboard, name='back_to_dashboard'),
+    path('add_collaborator/<int:project_id>/<str:username>/', views.add_collaborator, name='add_collaborator'),
+    path('remove_collaborator/<int:user_id>/', views.remove_collaborator, name='remove_collaborator'),
 ]
