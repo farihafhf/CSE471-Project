@@ -8,6 +8,12 @@
     <link href="https://bootswatch.com/5/united/bootstrap.min.css" rel="stylesheet">
     <title>Search Results</title>
     <style>
+        body {
+            background-image: url('/static/background9.jpg'); /* Replace with your background image path */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
         /* CSS for collaborators box */
         #collaborators-box {
             background: linear-gradient(to right, #800080, #b300b3); /* Purple gradient */
@@ -44,8 +50,8 @@
 {% else %}
     <p>No users found.</p>
 {% endif %}
-    <button type="button" class="btn btn-secondary">
-        <a href="{% url 'back_to_dashboard' %}" style="color: black;">Go back to dashboard</a>
+    <button type="button" class="btn btn">
+        <a href="{% url 'back_to_dashboard' %}" class="btn btn-primary" style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);">Go back to dashboard</a>
         
     </button>
 </div>

@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>Task List</title>
     <style>
+        body {
+            background-image: url('/static/background9.jpg'); /* Replace with your background image path */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
        
         form {
             margin-bottom: 20px;
@@ -150,14 +156,14 @@
     </script>
 </head>
 <body>
-    <h1>Task Details</h1>
+    <h1 align="center">Task Details</h1>
     <!-- <ul>
         {% for task in tasks %}
             <li>{{ task.title }} - {{ task.description }} - {{ task.due_date }} - {{ task.priority }}</li>
         {% endfor %}
     </ul>
      -->
-    <form method="post">
+    <form method="post" align="center">
         {% csrf_token %}
         <div>
             <!-- <label for="title">Title:</label>
@@ -179,17 +185,17 @@
                 <option value="High">High</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-success">Add Task details</button>
+        <button type="submit" class="btn btn-success" style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);">Add Task details</button>
     </form>
-
+    <hr>
     <h1 align = 'center'>Task Timer</h1>
     <!-- Timer container -->
     <div id="timer-container">
         <div id="timer">00:00:00</div>
-        <button onclick="setTimer()">Set</button>
-        <button onclick="startTimer()">Start</button>
-        <button onclick="pauseTimer()">Pause</button>
-        <button onclick="resetTimer()">Reset</button>
+        <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="setTimer()">Set</button>
+        <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="startTimer()">Start</button>
+        <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="pauseTimer()">Pause</button>
+        <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="resetTimer()">Reset</button>
     </div>
     
 </body>
