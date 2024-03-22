@@ -30,6 +30,10 @@ class Task(models.Model):
 
     def __str__(self):
         return self.task_name
+    
+    def mark_as_complete(self):
+        self.completion = True
+        self.save()
 
 
 
@@ -42,6 +46,8 @@ class Notice(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.notice}"
+    
+
     
 
 

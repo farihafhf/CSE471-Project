@@ -139,3 +139,9 @@ def notifications(request, user_id):
     notifications = Notice.objects.filter(user=user)
     # Render the notifications.html template with the notifications data
     return render(request, 'notifications.html', {'notifications': notifications})
+
+@login_required
+def complete_task(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    task.mark_as_complete()
+    return redirect('project_page', project_id=task.parent_project_id)
