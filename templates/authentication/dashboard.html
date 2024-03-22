@@ -40,6 +40,15 @@
             No Existing Project.
         {% endfor %}
         <br>
+        <h4>Projects You are Collaborating On:</h4>
+        {% for project in user_collaborating_projects %}
+            <div class="btn-group-vertical">
+                <br><a href="{% url 'project_page' project_id=project.project_id %}" class="btn btn-primary" style="color: white;">{{ project.project_name }}</a>
+            </div>
+        {% empty %}
+            Not Collaborating on Any Projects Yet.
+        {% endfor %}
+        <hr>
         <form method="post" action="/create_project/">
             {% csrf_token %}
             <input type="text" name="project_name" placeholder="New Project Name" required>
@@ -51,7 +60,11 @@
         <button type="button" class="btn btn-light"><a href="{% url 'edit_profile' %}" style="color: black;">Edit Profile</a></button>
         <br>
         <button type="button" class="btn btn-light"><a href="{% url 'view_profile' %}" style="color: black;">View Profile</a></button>
-    </div>
     
+    <br><br>
+    <a href="{% url 'notifications' user_id=request.user.id %}" class="btn btn-outline-primary">
+        ✉️ 
+    </a>
+</div>
 </body>
 </html>

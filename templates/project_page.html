@@ -14,14 +14,23 @@
     <div class='container'>
         <br>
         <h1>{{ project.project_name }}</h1>
-        <p>Project Created By: {{ project.created_by.username }}</p> <!-- Added this line -->
+        <p>Project Created By: {{ project.created_by.username }}</p> 
     </div><br>
     <div class="container">
         {% for task in project_tasks %}
         <div class="btn-group-vertical">
             <button type="button" class="btn btn-outline-info">
-                <a href="{% url 'task_page' %}">{{ task.task_name }}</a>
+                <a href="{% url 'task_page' %}" class="btn btn-outline-info">{{ task.task_name }}</a>
             </button>
+            <br>
+            
+            <form method="post" class="d-flex" action="{% url 'set_deadline' project_id=project.project_id task_id=task.task_id user_name=project.created_by.username %}">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="datetime-local" class="form-control" id="deadline" name="deadline" required>
+                    <button class="btn btn-danger" type="submit">Set Deadline</button>
+                </div>
+            </form>
             <form method="post" action="{% url 'delete_task' task_id=task.task_id %}" style="margin-left: auto;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-primary" style="font-size: 0.8em;">🗑️</button>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Project, Task
+from .models import Project, Task, Notice
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from .forms import TimerForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -106,3 +106,36 @@ def remove_collaborator(request, project_id, username):
     collaborator = get_object_or_404(User, username=username)
     project.collaborators.remove(collaborator)
     return redirect('dashboard')
+
+@login_required
+def set_deadline(request, project_id, task_id, user_name):
+    if request.method == 'POST':
+        deadline = request.POST.get('deadline')
+        
+        if deadline is None or not deadline.strip():
+            return HttpResponse('Invalid deadline')
+
+        # Fetch the Task and User objects or return a 404 error
+        task = get_object_or_404(Task, task_id=task_id)
+        user = get_object_or_404(User, username=user_name)
+        project= get_object_or_404(Project, project_id=project_id)
+        # Update the task deadline
+        task.deadline = deadline
+        task.save()
+
+        # Check if a notice for this task and user already exists
+        notice, created = Notice.objects.get_or_create(user=user, task=task, project=project)
+        notice_message = f'Deadline {task.deadline} {"updated" if not created else "added"} for {task.task_name} in Project {project.project_name} for user {user_name}'
+        notice.notice = notice_message
+        notice.save()
+
+        return HttpResponse(f'Deadline {task.deadline} updated for {task.task_name} in Project {project.project_name} for user {user_name}')
+    else:
+        return HttpResponse('GET request received')
+
+@login_required
+def notifications(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    notifications = Notice.objects.filter(user=user)
+    # Render the notifications.html template with the notifications data
+    return render(request, 'notifications.html', {'notifications': notifications})

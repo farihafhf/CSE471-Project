@@ -111,8 +111,10 @@ def signout(request):
 @login_required
 def dashboard(request):
     fname = request.user.first_name
-    user_projects = Project.objects.filter(created_by=request.user)
-    return render(request, 'authentication/dashboard.html', {'user_projects': user_projects,'fname': fname})
+    user_created_projects = Project.objects.filter(created_by=request.user)
+    user_collaborating_projects = Project.objects.filter(collaborators=request.user)
+    user_id = request.user.id
+    return render(request, 'authentication/dashboard.html', {'user_projects': user_created_projects,'fname': fname, 'user_id': user_id,'user_collaborating_projects': user_collaborating_projects})
 
 def contact(request):
     if request.method=='POST':

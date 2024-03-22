@@ -26,6 +26,7 @@ class Task(models.Model):
     ) 
 
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='Low')
+    deadline = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.task_name
@@ -33,8 +34,14 @@ class Task(models.Model):
 
 
 
+class Notice(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True, blank=True)
+    notice = models.TextField(default="End", null=True, blank=True)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE,default=None, null=True, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, null=True, blank=True)  # Allow NULL values
 
-
+    def __str__(self):
+        return f"{self.user.username} - {self.notice}"
     
 
 
