@@ -5,6 +5,7 @@ from django.http import Http404, HttpResponse
 from .forms import TimerForm
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .forms import CommentForm
 @login_required
 def create_project(request):
     if request.method == 'POST':
@@ -145,3 +146,19 @@ def complete_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     task.mark_as_complete()
     return redirect('project_page', project_id=task.parent_project_id)
+
+
+@login_required
+def add_comment(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.created_by = request.user
+            comment.project = project
+            comment.save()
+            return redirect('project_page', project_id=project_id)
+    else:
+        form = CommentForm()
+    return render(request, 'add_comment.html', {'form': form})

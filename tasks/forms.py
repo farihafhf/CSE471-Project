@@ -1,5 +1,6 @@
 from django import forms
 from .models import Task
+from .models import Comment
 
 
 class TaskForm(forms.ModelForm):
@@ -14,5 +15,10 @@ class TimerForm(forms.Form):
     hours = forms.IntegerField(label='Hours', min_value=0)
     minutes = forms.IntegerField(label='Minutes', min_value=0, max_value=59)
     seconds = forms.IntegerField(label='Seconds', min_value=0, max_value=59)
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
 
 

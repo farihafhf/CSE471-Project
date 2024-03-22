@@ -70,6 +70,16 @@
         <button type="button" class="btn btn">
             <a href="{% url 'back_to_dashboard' %}" style="background-color: rgba(61, 2, 113, 0); color: rgb(5, 0, 0);">Go back to dashboard</a>
         </button>
+        <!-- Display comments -->
+        {% for comment in project.comments.all %}
+            <p>{{ comment.created_by.username }}: {{ comment.content }}</p>
+        {% endfor %}
+
+        <!-- Link to comment creation page -->
+
+        <button type="button" class="btn btn">
+            <a href="{% url 'add_comment' project_id=project.project_id %}" style="background-color: rgb(162, 90, 224); color: rgb(255, 255, 255);" type="submit">Add Comment</a>
+        </button> 
 
         <br><br>
 

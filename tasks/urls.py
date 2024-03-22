@@ -19,6 +19,7 @@ urlpatterns = [
     path('set_deadline/<int:project_id>/<int:task_id>/<str:user_name>/', views.set_deadline, name='set_deadline'),
     path('notifications/<int:user_id>/', views.notifications, name='notifications'),
     path('complete_task/<int:task_id>/', views.complete_task, name='complete_task'),
+    path('project/<int:project_id>/add_comment/', views.add_comment, name='add_comment'),
 
 ]
 
