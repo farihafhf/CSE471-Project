@@ -30,6 +30,10 @@ class Task(models.Model):
 
     def __str__(self):
         return self.task_name
+    
+    def mark_as_complete(self):
+        self.completion = True
+        self.save()
 
 
 
@@ -43,6 +47,19 @@ class Notice(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.notice}"
+    
+
+class Comment(models.Model):
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, related_name='comments', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.content
+
+    
+
     
 
 

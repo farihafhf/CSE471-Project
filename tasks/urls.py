@@ -18,6 +18,12 @@ urlpatterns = [
     #path('remove_collaborator/<int:user_id>/', views.remove_collaborator, name='remove_collaborator'),
     path('set_deadline/<int:project_id>/<int:task_id>/<str:user_name>/', views.set_deadline, name='set_deadline'),
     path('notifications/<int:user_id>/', views.notifications, name='notifications'),
+<<<<<<< HEAD
     path('assign_task/<int:task_id>/<str:username>/', views.assign_task, name='assign_task'),
+=======
+    path('complete_task/<int:task_id>/', views.complete_task, name='complete_task'),
+    path('project/<int:project_id>/add_comment/', views.add_comment, name='add_comment'),
+
+>>>>>>> 59914b07592513a7a9b695c3b999e93473f06326
 ]
 
