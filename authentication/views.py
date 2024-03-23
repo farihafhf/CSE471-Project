@@ -111,8 +111,10 @@ def signout(request):
 @login_required
 def dashboard(request):
     fname = request.user.first_name
-    user_projects = Project.objects.filter(created_by=request.user)
-    return render(request, 'authentication/dashboard.html', {'user_projects': user_projects,'fname': fname})
+    user_created_projects = Project.objects.filter(created_by=request.user)
+    user_collaborating_projects = Project.objects.filter(collaborators=request.user)
+    user_id = request.user.id
+    return render(request, 'authentication/dashboard.html', {'user_projects': user_created_projects,'fname': fname, 'user_id': user_id,'user_collaborating_projects': user_collaborating_projects})
 
 def contact(request):
     if request.method=='POST':
@@ -147,3 +149,15 @@ def view_profile_from_search(request, username):
     return render(request, 'authentication/view_profile.html', {'user_profile': user_profile})
 
 
+from django.contrib.auth.forms import PasswordResetForm
+
+# In your view function
+def password_reset(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            form.save(request=request)
+            # Redirect or show success message
+    else:
+        form = PasswordResetForm()
+    return render(request, 'password_reset.html', {'form': form})

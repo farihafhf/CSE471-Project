@@ -1,5 +1,6 @@
 from django import forms
 from .models import Task
+from .models import Comment
 
 
 class TaskForm(forms.ModelForm):
@@ -15,4 +16,15 @@ class TimerForm(forms.Form):
     minutes = forms.IntegerField(label='Minutes', min_value=0, max_value=59)
     seconds = forms.IntegerField(label='Seconds', min_value=0, max_value=59)
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+
+
+from django import forms
+from django.contrib.auth.models import User
+
+class AssignTaskForm(forms.Form):
+    assigned_to = forms.ModelChoiceField(queryset=User.objects.all())
 

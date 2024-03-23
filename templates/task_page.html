@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>Task List</title>
     <style>
+        body {
+            background-image: url('/static/background9.jpg'); /* Replace with your background image path */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
        
         form {
             margin-bottom: 20px;
@@ -150,14 +156,14 @@
     </script>
 </head>
 <body>
-    <h1>Task Details</h1>
+    <h1 align="center">Task Details</h1>
     <!-- <ul>
         {% for task in tasks %}
             <li>{{ task.title }} - {{ task.description }} - {{ task.due_date }} - {{ task.priority }}</li>
         {% endfor %}
     </ul>
      -->
-    <form method="post">
+    <form method="post" align="center">
         {% csrf_token %}
         <div>
             <!-- <label for="title">Title:</label>
@@ -179,18 +185,63 @@
                 <option value="High">High</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-success">Add Task details</button>
+        <button type="submit" class="btn btn-success" style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);">Add Task details</button>
     </form>
-
+    <hr>
     <h1 align = 'center'>Task Timer</h1>
     <!-- Timer container -->
     <div id="timer-container">
         <div id="timer">00:00:00</div>
-        <button onclick="setTimer()">Set</button>
-        <button onclick="startTimer()">Start</button>
-        <button onclick="pauseTimer()">Pause</button>
-        <button onclick="resetTimer()">Reset</button>
+        <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="setTimer()">Set</button>
+        <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="startTimer()">Start</button>
+        <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="pauseTimer()">Pause</button>
+        <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="resetTimer()">Reset</button>
     </div>
     
 </body>
 </html>
+
+                <h3>Task Assigned to:</h3>
+                <!-- Display collaborators -->
+                {% if task.task_id and username %}
+                <a href="{% url 'assign_task' task_id=task.task_id username=username %}" class="btn btn-primary">Assign Task</a>
+            {% endif %}
+                  
+        
+
+<div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="background-color: rgb(91, 7, 164, 0.607); color: rgb(255, 255, 255);">
+              Collaborators:
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <ul> <!-- Moved the <ul> tag inside the accordion-body -->
+                    {% for assigned_to in task.assigned_to.all %}
+                        <li>{{ assigned_to.username }}</li>
+                    {% empty %}
+                        <li>No Assignments yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br>
+<form class="d-flex" method="GET" action="{% url 'search_by_username' %}">
+    <div class="input-group mb-3">
+        <input type="text" name="username" class="form-control me-sm-2" placeholder="Search by username" aria-label="Search by username" aria-describedby="search-button">
+        <input type="hidden" name="task_id" value="{{ task.task_id }}">
+        <button class="btn btn-dark" type="submit" id="search-button">⌕</button>
+        
+    </div>
+</form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

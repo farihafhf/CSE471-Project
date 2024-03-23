@@ -15,5 +15,12 @@ urlpatterns = [
     path('delete_project/<int:project_id>/', views.delete_project, name='delete_project'),
     path('back_to_dashboard/', views.back_to_dashboard, name='back_to_dashboard'),
     path('add_collaborator/<int:project_id>/<str:username>/', views.add_collaborator, name='add_collaborator'),
-    path('remove_collaborator/<int:user_id>/', views.remove_collaborator, name='remove_collaborator'),
+    #path('remove_collaborator/<int:user_id>/', views.remove_collaborator, name='remove_collaborator'),
+    path('set_deadline/<int:project_id>/<int:task_id>/<str:user_name>/', views.set_deadline, name='set_deadline'),
+    path('notifications/<int:user_id>/', views.notifications, name='notifications'),
+    path('assign_task/<int:task_id>/<str:username>/', views.assign_task, name='assign_task'),
+    path('complete_task/<int:task_id>/', views.complete_task, name='complete_task'),
+    path('project/<int:project_id>/add_comment/', views.add_comment, name='add_comment'),
+
 ]
+
