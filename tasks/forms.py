@@ -16,3 +16,9 @@ class TimerForm(forms.Form):
     seconds = forms.IntegerField(label='Seconds', min_value=0, max_value=59)
 
 
+from django import forms
+from django.contrib.auth.models import User
+
+class AssignTaskForm(forms.Form):
+    assigned_to = forms.ModelChoiceField(queryset=User.objects.all())
+

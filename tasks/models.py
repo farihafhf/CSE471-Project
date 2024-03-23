@@ -8,7 +8,7 @@ class Project(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)  
     created_at = models.DateTimeField(auto_now_add=True)
     collaborators = models.ManyToManyField(User, related_name='collaborating_projects', blank=True)
-
+    
     def __str__(self):
         return self.project_name
 
@@ -39,7 +39,8 @@ class Notice(models.Model):
     notice = models.TextField(default="End", null=True, blank=True)
     task = models.ForeignKey(Task, on_delete=models.CASCADE,default=None, null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None, null=True, blank=True)  # Allow NULL values
-
+    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assigned_tasks', blank=True, null=True)
+    
     def __str__(self):
         return f"{self.user.username} - {self.notice}"
     

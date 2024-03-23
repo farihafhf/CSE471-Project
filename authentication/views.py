@@ -149,3 +149,15 @@ def view_profile_from_search(request, username):
     return render(request, 'authentication/view_profile.html', {'user_profile': user_profile})
 
 
+from django.contrib.auth.forms import PasswordResetForm
+
+# In your view function
+def password_reset(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            form.save(request=request)
+            # Redirect or show success message
+    else:
+        form = PasswordResetForm()
+    return render(request, 'password_reset.html', {'form': form})

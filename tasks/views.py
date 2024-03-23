@@ -5,6 +5,12 @@ from django.http import Http404, HttpResponse
 from .forms import TimerForm
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import AssignTaskForm
+from .models import Task
+
+
+
 @login_required
 def create_project(request):
     if request.method == 'POST':
@@ -132,6 +138,26 @@ def set_deadline(request, project_id, task_id, user_name):
         return HttpResponse(f'Deadline {task.deadline} updated for {task.task_name} in Project {project.project_name} for user {user_name}')
     else:
         return HttpResponse('GET request received')
+
+
+
+
+def assign_task(request, task_id, username):
+    task = get_object_or_404(Task, pk=task_id)
+    assigned_to = get_object_or_404(User, username=username)
+    if request.method == 'POST':
+        form = AssignTaskForm(request.POST)
+        if form.is_valid():
+            assigned_to = form.cleaned_data['assigned_to']
+            task.assigned_to = assigned_to()
+            task.save()
+            messages.success(request, f"Task is assigned to: {assigned_to.username} successfully")
+            return redirect('project_page', task_id=task_id)
+    else:
+        form = AssignTaskForm()
+    return render(request, 'assign_task.html', {'form': form})
+
+
 
 @login_required
 def notifications(request, user_id):

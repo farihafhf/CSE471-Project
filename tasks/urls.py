@@ -18,5 +18,6 @@ urlpatterns = [
     #path('remove_collaborator/<int:user_id>/', views.remove_collaborator, name='remove_collaborator'),
     path('set_deadline/<int:project_id>/<int:task_id>/<str:user_name>/', views.set_deadline, name='set_deadline'),
     path('notifications/<int:user_id>/', views.notifications, name='notifications'),
+    path('assign_task/<int:task_id>/<str:username>/', views.assign_task, name='assign_task'),
 ]
 
