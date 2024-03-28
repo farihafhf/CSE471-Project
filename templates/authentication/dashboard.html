@@ -10,18 +10,35 @@
     <link href="https://bootswatch.com/5/united/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-image: url('/static/background9.jpg'); /* Replace with your background image path */
+            background-image: url('/static/bg1.jpg'); /* Replace with your background image path */
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
         }
-        .top-right-button {
+        .top-right-buttons {
             position: absolute;
             top: 10px;
             right: 20px;
         }
-        .btn-primary {
-            text-decoration: none; /* Remove underline from buttons */
+        .woody-button {
+            background-color: rgb(189,137,102);
+            color: white;
+        }
+        .woody-button:hover {
+            background-color: rgb(205,170,125);
+        }
+        .projects-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .projects-column {
+            width: 48%; /* Adjust as needed */
+        }
+        .delete-button {
+            font-size: 1.2em;
+            padding: 0;
+            border: none;
+            background: none;
         }
     </style>
 </head>
@@ -33,48 +50,50 @@
         <br>
         <h4 align="center">Hello <b> {{ fname }} !</b> </h4>
         <br>
-        <center>
-        <a href="{% url 'notifications' user_id=request.user.id %}" class="btn btn-outline-primary">
-            ✉️ 
-        </a>
-        </center>
         <br>
-        <h4> <b> Your projects: </b> </h4>
-        {% for project in user_projects %}
-        <div class="btn-group-vertical">
-            <br><a href="{% url 'project_page' project_id=project.project_id %}" class="btn btn-primary" style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);">{{ project.project_name }}</a>
-        </div>
-        <form method="post" action="{% url 'delete_project' project_id=project.project_id %}" style="margin-left: auto;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-primary" style="font-size: 0.8em;">🗑️</button>
-           
-        </form>
-        {% empty %}
-            No Existing Project.
-        {% endfor %}
-        <br>
-        <h4> <b> Projects You are Collaborating On: </b></h4>
-        {% for project in user_collaborating_projects %}
-            <div class="btn-group-vertical">
-                <br><a href="{% url 'project_page' project_id=project.project_id %}" class="btn btn-primary" style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);">{{ project.project_name }}</a>
+        <div class="projects-container">
+            <div class="projects-column">
+                <h4> <b> Your projects: </b> </h4>
+                {% for project in user_projects %}
+                <div class="btn-group-vertical">
+                    <br><a href="{% url 'project_page' project_id=project.project_id %}" class="btn woody-button">{{ project.project_name }}</a>
+                </div>
+                <form method="post" action="{% url 'delete_project' project_id=project.project_id %}" style="margin-left: auto;">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-button" style="font-size: 0.8em;">🗑️</button>
+                </form>
+                {% empty %}
+                    No Existing Project.
+                {% endfor %}
+                <br>
+                <form method="post" action="/create_project/">
+                    {% csrf_token %}
+                    <input type="text" name="project_name" placeholder="New Project Name" required>
+                    <button type="submit" class="btn btn-outline-dark"> <strong>Create Project</strong></button>
+                </form>
             </div>
-        {% empty %}
-            Not Collaborating on Any Projects Yet.
-        {% endfor %}
+            <div class="projects-column">
+                <h4> <b> Projects You are Collaborating On: </b></h4>
+                {% for project in user_collaborating_projects %}
+                
+                    <br><a href="{% url 'project_page' project_id=project.project_id %}" class="btn woody-button">{{ project.project_name }}</a>
+                <br>
+                {% empty %}
+                    Not Collaborating on Any Projects Yet.
+                {% endfor %}
+            </div>
+        </div>
         <br> <br> <br>
-        <form method="post" action="/create_project/">
-            {% csrf_token %}
-            <input type="text" name="project_name" placeholder="New Project Name" required>
-            <button type="submit" class="btn btn-success" style="background-color: rgb(68, 6, 78); color: white" > Create Project</button>
-        </form>
-        <br>
-        <button type="button" style="color: white" class="btn btn-secondary top-right-button"><a href="/signout" style="color: white;">Sign Out</a></button>
-        
+        <button type="button" class="btn btn-light"><a href="{% url 'edit_profile' %}" style="color: black;">Edit Profile</a></button>
+        <button type="button" class="btn btn-light"><a href="{% url 'view_profile' %}" style="color: black;">View Profile</a></button>
         <hr>
-        <button type="button" class="btn btn-light" style="background-color: white;"><a href="{% url 'edit_profile' %}" style="color: black;">Edit Profile</a></button>
-        <br>
-        <br>
-        <button type="button" class="btn btn-light" style="background-color: white;"><a href="{% url 'view_profile' %}" style="color: black;">View Profile</a></button>
-</div>
+        <div class="top-right-buttons">
+            <a href="{% url 'notifications' user_id=request.user.id %}" class="btn btn-outline-info">
+                ✉️ 
+            </a>
+            <button type="button" style="color: white" class="btn btn-secondary"><a href="/signout" style="color: white;">Sign Out</a></button>
+            
+        </div>
+    </div>
 </body>
 </html>
