@@ -40,6 +40,7 @@
                     <span>ttttt  Mark as Done</span>
                 </form>
             </button>
+            
             <form method="post" action="{% url 'delete_task' task_id=task.task_id %}" style="margin-left: auto;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-primary" style="font-size: 0.8em;">🗑️</button>
@@ -56,21 +57,9 @@
                 </div>
 
             </form>
-<<<<<<< HEAD
             
-            <form><!-- task_detail.html -->
-                ...
-                <h3>Collaborators:</h3>
-                <!-- Display collaborators -->
-                
-                </form>
-            <form method="post" action="{% url 'delete_task' task_id=task.task_id %}" style="margin-left: auto;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-primary" style="font-size: 0.8em;">🗑️</button>
-            </form>  
-=======
+        
               
->>>>>>> 59914b07592513a7a9b695c3b999e93473f06326
         </div><br><br>
         {% empty %}
             <!-- No Existing Project. -->

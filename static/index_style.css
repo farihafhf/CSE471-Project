@@ -6,7 +6,7 @@ body{
 	align-items: center;
 	min-height: 100vh;
 	font-family: 'Jost', sans-serif;
-	background: url("background9.jpg");
+	/* background: url("sign_in_background.png"); */
 }
 .main{
 	width: 400px;
