@@ -12,5 +12,10 @@
             <li>{{ notification.notice }}</li>
         {% endfor %}
     </ul>
+
+    <button type="button" class="btn btn">
+        <a href="{% url 'back_to_dashboard' %}" class="btn btn-primary" style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);">Go back to dashboard</a>
+        
+    </button>
 </body>
 </html>
