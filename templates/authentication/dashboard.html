@@ -21,11 +21,11 @@
             right: 20px;
         }
         .woody-button {
-            background-color: rgb(189,137,102);
+            background-color: rgb(146,119,98);
             color: white;
         }
         .woody-button:hover {
-            background-color: rgb(205,170,125);
+            background-color: rgb(205,169,142);
         }
         .projects-container {
             display: flex;
@@ -88,8 +88,8 @@
         <button type="button" class="btn btn-light"><a href="{% url 'view_profile' %}" style="color: black;">View Profile</a></button>
         <hr>
         <div class="top-right-buttons">
-            <a href="{% url 'notifications' user_id=request.user.id %}" class="btn btn-outline-info">
-                ✉️ 
+            <a href="{% url 'notifications' user_id=request.user.id %}" class="btn btn-outline-dark">
+              🔔 
             </a>
             <button type="button" style="color: white" class="btn btn-secondary"><a href="/signout" style="color: white;">Sign Out</a></button>
             
