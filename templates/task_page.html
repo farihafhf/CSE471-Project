@@ -175,7 +175,11 @@
         <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="startTimer()">Start</button>
         <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="pauseTimer()">Pause</button>
         <button style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);" onclick="resetTimer()">Reset</button>
+
+        
     </div>
-    
+    <div class="btn-group-vertical">
+        <br><a href="{% url 'project_page' project_id=project_id %}" class="btn btn-dark">Go Back To Project</a>
+    </div>
 </body>
 </html>

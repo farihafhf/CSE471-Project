@@ -60,6 +60,7 @@ def delete_task(request, task_id):
 @login_required
 def task_page(request, project_id, user_id, task_id):
     task = get_object_or_404(Task, pk=task_id)
+    
     form = TimerForm()
     context = {'task': task, 'form': form, 'project_id': project_id, 'user_id': user_id, 'task_id': task_id}
     return render(request, 'task_page.html', context)
@@ -76,7 +77,7 @@ def stop_timer(request, task_id):
 
 @login_required
 def reset_timer(request, task_id):
-    # Reset timer logic
+    
     return redirect('task_page')
 
 @login_required
@@ -133,7 +134,8 @@ def set_deadline(request, project_id, task_id, user_name):
         task.save()
 
         # Create a new notice for the updated deadline
-        notice_message = f'Deadline {deadline} updated for {task.task_name} in Project {project.project_name} for user {task.assigned_to}'
+        notice_message = f"The deadline for '{task.task_name}' in '{project.project_name}' has been updated to '{deadline}' for user '{task.assigned_to.username}'.        "
+
         notice = Notice.objects.create(user=task.assigned_to, task=task, project=project, notice=notice_message)
 
         return redirect('project_page', project_id=project_id)
@@ -156,7 +158,7 @@ def assign_task(request, task_id, username):
         form = AssignTaskForm()
     return render(request, 'assign_task.html', {'form': form})
 
-
+@login_required
 def add_additional_details(request, project_id, task_id, user_name):
     if request.method == 'POST':
         # Get form data
@@ -174,6 +176,16 @@ def add_additional_details(request, project_id, task_id, user_name):
         task.priority = priority
         task.status = status
         
+        # Check if task deadline exists
+        if task.deadline:
+            # Update username and notice in notifications
+            notices = Notice.objects.filter(task_id=task_id).exclude(user=assigned_to_username)
+
+            for notice in notices:
+                notice.user = assigned_to_username
+                notice.notice = f"Task {task.task_name} assigned to {assigned_to_username}"
+                notice.save()
+        
         # Retrieve the user object by username
         assigned_to_user = User.objects.get(username=assigned_to_username)
         task.assigned_to = assigned_to_user
@@ -184,14 +196,13 @@ def add_additional_details(request, project_id, task_id, user_name):
     else:
         return HttpResponse('Invalid request method')
 
-
-
 @login_required
 def notifications(request, user_id):
     user = get_object_or_404(User, id=user_id)
     notifications = Notice.objects.filter(user=user)
     # Render the notifications.html template with the notifications data
     return render(request, 'notifications.html', {'notifications': notifications})
+
 
 @login_required
 def complete_task(request, task_id):

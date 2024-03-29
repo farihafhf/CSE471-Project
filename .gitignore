@@ -10,7 +10,7 @@ authentication/__pycache__/*.pyc
 
 # Django migrations
 **/migrations/
-db.sqlite3
+
 
 
 

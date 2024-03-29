@@ -68,7 +68,7 @@ button:hover{
 }
 .login {
     height: 680px;
-    background: #eee;
+    background: #ceaad0;
     border-radius: 60% / 10%;
     transform: translateY(-180px); 
     transition: .8s ease-in-out;
@@ -76,7 +76,7 @@ button:hover{
 
 .login label{
 	color: #573b8a;
-	transform: scale(.6);
+	transform: scale(.5);
 }
 
 #chk:checked ~ .login{

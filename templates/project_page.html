@@ -160,12 +160,14 @@
                     
                     <div class="mb-3">
                         <label for="assigned_to" class="form-label">Assigned To</label>
-                        <select class="form-select" id="assigned_to" name="assigned_to" required>
+                        <select class="form-select" id="assigned_to" name="assigned_to" >
                             {% for collaborator in project.collaborators.all %}
                                 <option value="{{ collaborator.username }}">{{ collaborator.username }}</option>
                             {% endfor %}
+                            <option value="{{ project.created_by.username }}">{{ project.created_by.username }}</option>
                         </select>
                     </div>
+                    
                 </div>
                 <button type="submit" class="btn btn-primary">Add Details</button>
             </form>
