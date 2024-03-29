@@ -4,12 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifications</title>
+    <style>
+        /* Add your CSS styles here */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #9fd533d2;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #df4f4fa5;
+        }
+    </style>
 </head>
 <body>
     <h1>Notifications</h1>
+    <div class="dropdown">
+        <button class="dropbtn">Settings</button>
+        <div class="dropdown-content">
+            <a href="#" id="markAsRead">Mark as Read</a>
+            <a href="#" id="deleteSelected">Delete Selected Notifications</a>
+        </div>
+    </div>
     <ul>
         {% for notification in notifications %}
-            <li>{{ notification.notice }}</li>
+            <li><input type="checkbox" class="notification-checkbox" data-id="{{ notification.id }}"> <b {% if notification.read %} style="color: grey;" {% endif %}>{{ notification.notice }}</b></li>
         {% endfor %}
     </ul>
 
@@ -17,8 +59,48 @@
         <a href="{% url 'back_to_dashboard' %}" class="btn btn-primary" style="background-color: rgb(61, 2, 113); color: rgb(255, 255, 255);">Go back to dashboard</a>
         
     </button>
+    <script>
+        // Add your JavaScript code here
+        document.getElementById('markAsRead').addEventListener('click', function() {
+            // Implementation to mark notifications as read
+            let checkboxes = document.querySelectorAll('.notification-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    let notificationId = checkbox.getAttribute('data-id');
+                    let notificationText = checkbox.nextElementSibling;
+                    notificationText.style.color = 'grey';
+                    // Save the read status to localStorage
+                    localStorage.setItem(`notification_${notificationId}`, 'read');
+                }
+            });
+        });
+
+        document.getElementById('deleteSelected').addEventListener('click', function() {
+            // Implementation to delete selected notifications
+            let checkboxes = document.querySelectorAll('.notification-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    checkbox.parentNode.remove();
+                    // Optionally, remove the deleted notification from localStorage
+                    let notificationId = checkbox.getAttribute('data-id');
+                    localStorage.removeItem(`notification_${notificationId}`);
+                }
+            });
+        });
+
+        // Check localStorage for notifications marked as read
+        window.addEventListener('DOMContentLoaded', function() {
+            let checkboxes = document.querySelectorAll('.notification-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                let notificationId = checkbox.getAttribute('data-id');
+                let notificationText = checkbox.nextElementSibling;
+                let readStatus = localStorage.getItem(`notification_${notificationId}`);
+                if (readStatus === 'read') {
+                    checkbox.checked = true;
+                    notificationText.style.color = 'grey';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
-
-
-
