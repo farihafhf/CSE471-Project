@@ -10,7 +10,29 @@
             background-attachment: fixed;
             background-size: cover;
         }
-       
+        .container {
+            width: 40%;
+            margin: 0 auto;
+            text-align: left;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-details {
+            margin-bottom: 15px;
+        }
+
+        .task-details h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+        }
         form {
             margin-bottom: 20px;
         }
@@ -63,11 +85,11 @@
         }
 
         button {
-            padding: 0px 30px;
+            padding: 0px 40px;
             background-color: #9900ff;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 7px;
             cursor: pointer;
             margin: 0 5px;
         }
@@ -156,16 +178,35 @@
     </script>
 </head>
 <body>
-    <h1 align="center">Task Details</h1>
-    <div class="containe"r>
-        <h3>Task Name: {{ task.task_name }}</h3>
-        <h3>Description: {{ task.description }}</h3>
-        <h3>Completion: {% if task.completion %} Completed {% else %} Pending {% endif %}</h3>
-        <h3>Priority: {{ task.priority }}</h3>
-        <h3>Deadline: {{ task.deadline }}</h3>
-        <h3>Assigned To: {{ task.assigned_to.username }}</h3>
-        <h3>Status: {{ task.status }}</h3>
+    <h1>Task Details</h1>
+<div class="container">
+    <div class="task-details">
+        <h3>Task Name:</h3>{{ task.task_name }}
     </div>
+    <div class="task-details">
+        <h3>Description:</h3>{{ task.description }}
+    </div>
+    <div class="task-details">
+        <h3>Completion:</h3>
+        {% if task.completion %} Completed {% else %} Pending {% endif %}
+    </div>
+    <div class="task-details">
+        <h3>Priority:</h3>
+        {{ task.priority }}
+    </div>
+    <div class="task-details">
+        <h3>Deadline:</h3>
+        {{ task.deadline }}
+    </div>
+    <div class="task-details">
+        <h3>Assigned To:</h3>
+        {{ task.assigned_to.username }}
+    </div>
+    <div class="task-details">
+        <h3>Status:</h3>
+        {{ task.status }}
+    </div>
+</div>
     <hr>
     <h1 align = 'center'>Task Timer</h1>
     <!-- Timer container -->
