@@ -7,7 +7,7 @@ urlpatterns = [
     path('project/<int:project_id>/', views.project_page, name='project_page'),
     path('create_task/<int:project_id>/', views.create_task, name='create_task'),
     path('delete_task/<int:task_id>/', views.delete_task, name='delete_task'),
-    path('task_page/', views.task_page, name='task_page'),
+    path('task_page/<int:project_id>/<int:user_id>/<int:task_id>/', views.task_page, name='task_page'),
     path('task/<int:task_id>/start/', views.start_timer, name='start_timer'),
     path('task/<int:task_id>/stop/', views.stop_timer, name='stop_timer'),
     path('task/<int:task_id>/reset/', views.reset_timer, name='reset_timer'),
@@ -21,6 +21,7 @@ urlpatterns = [
     path('assign_task/<int:task_id>/<str:username>/', views.assign_task, name='assign_task'),
     path('complete_task/<int:task_id>/', views.complete_task, name='complete_task'),
     path('project/<int:project_id>/add_comment/', views.add_comment, name='add_comment'),
-
+    path('add_additional_details/<int:task_id>/<int:project_id>/<str:user_name>/', views.add_additional_details, name='add_additional_details'),
 ]
+
 

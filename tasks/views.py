@@ -58,10 +58,10 @@ def delete_task(request, task_id):
     return redirect('project_page', project_id=task.parent_project_id)
 
 @login_required
-def task_page(request):
-    tasks = Task.objects.all()
+def task_page(request, project_id, user_id, task_id):
+    task = get_object_or_404(Task, pk=task_id)
     form = TimerForm()
-    context = {'tasks': tasks, 'form': form}
+    context = {'task': task, 'form': form, 'project_id': project_id, 'user_id': user_id, 'task_id': task_id}
     return render(request, 'task_page.html', context)
 
 @login_required
@@ -118,23 +118,25 @@ def set_deadline(request, project_id, task_id, user_name):
         if deadline is None or not deadline.strip():
             return HttpResponse('Invalid deadline')
 
-        # Fetch the Task and User objects or return a 404 error
+        # Fetch the Task, User, and Project objects or return a 404 error
         task = get_object_or_404(Task, task_id=task_id)
         user = get_object_or_404(User, username=user_name)
-        project= get_object_or_404(Project, project_id=project_id)
+        project = get_object_or_404(Project, project_id=project_id)
+        
+        # Check if a notice for this task and user already exists and delete it if found
+        existing_notice = Notice.objects.filter(task=task, project=project)
+        if existing_notice:
+            existing_notice.delete()
+
         # Update the task deadline
         task.deadline = deadline
         task.save()
 
-        # Check if a notice for this task and user already exists
-        notice, created = Notice.objects.get_or_create(user=user, task=task, project=project)
-        notice_message = f'Deadline {task.deadline} {"updated" if not created else "added"} for {task.task_name} in Project {project.project_name} for user {user_name}'
-        notice.notice = notice_message
-        notice.save()
+        # Create a new notice for the updated deadline
+        notice_message = f'Deadline {deadline} updated for {task.task_name} in Project {project.project_name} for user {task.assigned_to}'
+        notice = Notice.objects.create(user=task.assigned_to, task=task, project=project, notice=notice_message)
 
-        return HttpResponse(f'Deadline {task.deadline} updated for {task.task_name} in Project {project.project_name} for user {user_name}')
-    else:
-        return HttpResponse('GET request received')
+        return redirect('project_page', project_id=project_id)
 
 
 
@@ -153,6 +155,34 @@ def assign_task(request, task_id, username):
     else:
         form = AssignTaskForm()
     return render(request, 'assign_task.html', {'form': form})
+
+
+def add_additional_details(request, project_id, task_id, user_name):
+    if request.method == 'POST':
+        # Get form data
+        description = request.POST.get('description')
+        priority = request.POST.get('priority')
+        status = request.POST.get('status')
+        assigned_to_username = request.POST.get('assigned_to')  # Assuming username is passed
+        
+        # Retrieve project and task objects
+        project = get_object_or_404(Project, pk=project_id)
+        task = get_object_or_404(Task, pk=task_id)
+        
+        # Update task with additional details
+        task.description = description
+        task.priority = priority
+        task.status = status
+        
+        # Retrieve the user object by username
+        assigned_to_user = User.objects.get(username=assigned_to_username)
+        task.assigned_to = assigned_to_user
+        
+        task.save()
+        
+        return redirect('project_page', project_id=project_id)
+    else:
+        return HttpResponse('Invalid request method')
 
 
 
