@@ -20,9 +20,82 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn" style="background-color: rgb(68, 6, 78); color: white">Save Changes</button>
+    <button type="submit" onclick="showToast('Saved changes!', 3000)" class="btn btn" style="background-color: rgb(68, 6, 78); color: white">Save Changes</button>
   </form>
 
 </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toast Notification</title>
+<style>
+  /* CSS for toast notification */
+  .toast {
+    visibility: hidden;
+    min-width: 250px;
+    margin: auto;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .show {
+    visibility: visible;
+    -webkit-animation: slide-in 0.5s, slide-out 0.5s 3s;
+    animation: slide-in 0.5s, slide-out 0.5s 3s;
+  }
+  @keyframes slide-in {
+    from {
+      transform: translateX(-50%) translateY(100%);
+    }
+    to {
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+  @keyframes slide-out {
+    from {
+      transform: translateX(-50%) translateY(0);
+    }
+    to {
+      transform: translateX(-50%) translateY(100%);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- HTML for toast notification -->
+<div id="toast" class="toast"></div>
+
+<!-- JavaScript for toast notification -->
+<script>
+  function showToast(message, duration) {
+    var toast = document.getElementById("toast");
+    toast.innerHTML = message;
+    toast.className = "toast show";
+    setTimeout(function(){
+      toast.className = toast.className.replace("show", "");
+    }, duration);
+  }
+  // Check if there's a stored toast message
+  window.onload = function() {
+    var storedMessage = localStorage.getItem("toast_message");
+    if (storedMessage) {
+      showToast(storedMessage, 3000); // Change duration here (in milliseconds)
+    }
+  };
+
+</script>
 </body>
 </html>
