@@ -18,13 +18,13 @@ def edit_profile(request):
             user_profile = form.save(commit=False)  # Avoid saving twice
             user_profile.user = request.user
             user_profile.save()  # Now save the profile with the user association
-            messages.success(request, 'Profile created and updated successfully')
+            
             return redirect('dashboard')
 
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            messages.success(request, 'Profile updated successfully')
+            
             return redirect('dashboard')
     else:
         form = ProfileForm(instance=request.user.userprofile)
@@ -105,7 +105,8 @@ def signin(request):
 
 def signout(request):
     logout(request)
-    messages.success(request,"Logged out successfully")
+    
+    
     return redirect("home")
 
 @login_required

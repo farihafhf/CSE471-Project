@@ -201,8 +201,9 @@
                                 {% for collaborator in project.collaborators.all %}
                                 <li>{{ collaborator.username }}</li>
                                 {% empty %}
-                                <li>No collaborators yet.</li>
+                                <li>No Collaborators Added Yet.</li>
                                 {% endfor %}
+                                <li value="{{ project.created_by.username }}">{{ project.created_by.username }}</li>
                             </ul>
                         </div>
                     </div>

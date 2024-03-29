@@ -170,7 +170,7 @@ def add_additional_details(request, project_id, task_id, user_name):
         # Retrieve project and task objects
         project = get_object_or_404(Project, pk=project_id)
         task = get_object_or_404(Task, pk=task_id)
-        
+        user_object=get_object_or_404(User,username=assigned_to_username)
         # Update task with additional details
         task.description = description
         task.priority = priority
@@ -179,10 +179,10 @@ def add_additional_details(request, project_id, task_id, user_name):
         # Check if task deadline exists
         if task.deadline:
             # Update username and notice in notifications
-            notices = Notice.objects.filter(task_id=task_id).exclude(user=assigned_to_username)
+            notices = Notice.objects.filter(task_id=task_id).exclude(user=user_object.id)
 
             for notice in notices:
-                notice.user = assigned_to_username
+                notice.user = user_object
                 notice.notice = f"Task {task.task_name} assigned to {assigned_to_username}"
                 notice.save()
         
