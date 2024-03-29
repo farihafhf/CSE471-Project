@@ -60,7 +60,7 @@
                 </div>
                 <form method="post" action="{% url 'delete_project' project_id=project.project_id %}" style="margin-left: auto;">
                     {% csrf_token %}
-                    <button type="submit" class="delete-button" style="font-size: 0.8em;">🗑️</button>
+                    <button type="submit" class="delete-button" style="font-size: 0.8em; background-color: rgb(145, 97, 58);" title="Delete Project">🗑️</button>
                 </form>
                 {% empty %}
                     No Existing Project.
