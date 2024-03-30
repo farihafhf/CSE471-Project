@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Project, Task, Notice
+from .models import Project, Task, Notice, Message
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from .forms import TimerForm
@@ -202,7 +202,12 @@ def notifications(request, user_id):
     notifications = Notice.objects.filter(user=user)
     # Render the notifications.html template with the notifications data
     return render(request, 'notifications.html', {'notifications': notifications})
-
+@login_required
+def mssgs(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    messages = Message.objects.filter(to_user_id=user.id)
+    # Render the notifications.html template with the notifications data
+    return render(request, 'mssgs.html', {'messages': messages})
 
 @login_required
 def complete_task(request, task_id):
@@ -225,3 +230,26 @@ def add_comment(request, project_id):
     else:
         form = CommentForm()
     return render(request, 'add_comment.html', {'form': form})
+
+def send_message(request):
+    if request.method == 'POST':
+        recipient_id = request.POST.get('recipient')
+        project_id = request.POST.get('project_id')
+        user_id = request.POST.get('user_id')
+        message_text = request.POST.get('message')
+        
+        try:
+            sender = User.objects.get(id=user_id)
+            recipient = User.objects.get(id=recipient_id)
+            project = Project.objects.get(project_id=project_id)
+            
+            message = Message.objects.create(
+                from_user=sender,
+                to_user=recipient,
+                related_project=project,
+                message=message_text
+            )
+            
+            return HttpResponse("Message sent!")
+        except Exception as e:
+            return HttpResponse(f"An error occurred: {e}")

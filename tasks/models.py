@@ -70,3 +70,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content
+    
+class Message(models.Model):
+    from_user = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
+    related_project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    message = models.TextField()
+
+    def __str__(self):
+        return f"From: {self.from_user.username} | To: {self.to_user.username} | Project: {self.related_project.project_name}"

@@ -116,10 +116,9 @@
 </head>
 <body>
 
-<!-- HTML for toast notification -->
+
 <div id="toast" class="toast"></div>
 
-<!-- JavaScript for toast notification -->
 <script>
     function showToast(message, duration) {
       var toast = document.getElementById("toast");
@@ -136,7 +135,7 @@
     window.onload = function() {
       var storedMessage = localStorage.getItem("toast_message");
       if (storedMessage) {
-        showToast(storedMessage, 3000); // Change duration here (in milliseconds)
+        showToast(storedMessage, 3000);
       }
     };
   </script>

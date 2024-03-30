@@ -66,6 +66,8 @@
         .comments-container {
             float: right; /* Float to the right */
             margin-top: 20px; /* Adjust as needed */
+            margin-right:100px
+            
         }
         .delete-button {
             font-size: 1.2em;
@@ -201,11 +203,30 @@
                         <div class="accordion-body">
                             <ul>
                                 {% for collaborator in project.collaborators.all %}
-                                <li>{{ collaborator.username }}</li>
+                                <li>{{ collaborator.username }} 
+                                    <form method="POST" action="{% url 'send_message' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="recipient" value="{{ collaborator.id }}">
+                                        <input type="hidden" name="project_id" value="{{ project.project_id }}">
+                                        <input type="hidden" name="user_id" value="{{ request.user.id }}">
+                                        <textarea name="message" class="form-control" rows="3" placeholder="Enter your message"></textarea>
+                                        <button type="submit" class="btn btn-dark">Send Message</button>
+                                    </form>
+                                </li>
+
                                 {% empty %}
                                 <li>No Collaborators Added Yet.</li>
                                 {% endfor %}
-                                <li value="{{ project.created_by.username }}">{{ project.created_by.username }}</li>
+                                <li value="{{ project.created_by.username }}">{{ project.created_by.username }}
+                                    <form method="POST" action="{% url 'send_message' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="recipient" value="{{ project.created_by.id }}">
+                                        <input type="hidden" name="project_id" value="{{ project.project_id }}">
+                                        <input type="hidden" name="user_id" value="{{ request.user.id }}">
+                                        <textarea name="message" class="form-control" rows="3" placeholder="Enter your message"></textarea>
+                                        <button type="submit" class="btn btn-dark">Send Message</button>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -222,7 +243,7 @@
         </div>
         <a href="{% url 'back_to_dashboard' %}" class="btn btn-secondary">Go back to dashboard</a>
     </div>
-
+    
     <!-- Comments container floated to the right -->
     <div class="comments-container">
         <!-- Display comments -->
