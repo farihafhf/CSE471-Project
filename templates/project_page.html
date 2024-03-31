@@ -93,6 +93,14 @@
         <h1>{{ project.project_name }}</h1>
         <p>Project Created By: {{ project.created_by.username }}</p> 
         <br>
+        {% if messages %}
+    <div class="alert alert-dismissible {% if messages.tags %}alert-{{ messages.tags }}{% endif %}" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
+
         {% for task in project_tasks %}
 <div class="accordion" id="accordionExample">
     <div class="accordion-item">
