@@ -64,10 +64,13 @@
             text-align: left; /* Ensure left alignment for buttons */
         }
         .comments-container {
-            float: right; /* Float to the right */
-            margin-top: 20px; /* Adjust as needed */
-            margin-right:100px
-            
+            position: fixed;
+            top: 0;
+            right: 60px; /* Adjust margin-right as needed */
+            background-color: rgba(255, 255, 255, 0.5); /* Transparent background */
+            padding: 30px; /* Add padding for better visibility */
+            width: 600px; /* Adjust width as needed */
+            height: 1000px; /* Adjust height as needed */
         }
         .delete-button {
             font-size: 1.2em;
@@ -256,7 +259,12 @@
     <div class="comments-container">
         <!-- Display comments -->
         {% for comment in project.comments.all %}
-        <p>{{ comment.created_by.username }}: {{ comment.content }}</p>
+        <table class="table table-hover"> <tbody>
+            <tr class="table-info">
+                <th scope="row">{{ comment.created_by.username }}: </th>
+                <td> {{ comment.content }}</td>
+            </tr>
+        </tbody></table>
         {% endfor %}
         <!-- Link to comment creation page -->
         <a href="{% url 'add_comment' project_id=project.project_id %}" class="btn btn-info" onclick="showToast('Your comment has been added!', 3000)"><strong>Add Comment</strong></a>
