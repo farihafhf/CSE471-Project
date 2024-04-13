@@ -64,8 +64,13 @@
             text-align: left; /* Ensure left alignment for buttons */
         }
         .comments-container {
-            float: right; /* Float to the right */
-            margin-top: 20px; /* Adjust as needed */
+            position: fixed;
+            top: 0;
+            right: 60px; /* Adjust margin-right as needed */
+            background-color: rgba(255, 255, 255, 0.5); /* Transparent background */
+            padding: 30px; /* Add padding for better visibility */
+            width: 600px; /* Adjust width as needed */
+            height: 1000px; /* Adjust height as needed */
         }
         .delete-button {
             font-size: 1.2em;
@@ -91,6 +96,14 @@
         <h1>{{ project.project_name }}</h1>
         <p>Project Created By: {{ project.created_by.username }}</p> 
         <br>
+        {% if messages %}
+    <div class="alert alert-dismissible {% if messages.tags %}alert-{{ messages.tags }}{% endif %}" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
+
         {% for task in project_tasks %}
 <div class="accordion" id="accordionExample">
     <div class="accordion-item">
@@ -201,11 +214,30 @@
                         <div class="accordion-body">
                             <ul>
                                 {% for collaborator in project.collaborators.all %}
-                                <li>{{ collaborator.username }}</li>
+                                <li>{{ collaborator.username }} 
+                                    <form method="POST" action="{% url 'send_message' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="recipient" value="{{ collaborator.id }}">
+                                        <input type="hidden" name="project_id" value="{{ project.project_id }}">
+                                        <input type="hidden" name="user_id" value="{{ request.user.id }}">
+                                        <textarea name="message" class="form-control" rows="3" placeholder="Enter your message"></textarea>
+                                        <button type="submit" class="btn btn-dark">Send Message</button>
+                                    </form>
+                                </li>
+
                                 {% empty %}
                                 <li>No Collaborators Added Yet.</li>
                                 {% endfor %}
-                                <li value="{{ project.created_by.username }}">{{ project.created_by.username }}</li>
+                                <li value="{{ project.created_by.username }}">{{ project.created_by.username }}
+                                    <form method="POST" action="{% url 'send_message' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="recipient" value="{{ project.created_by.id }}">
+                                        <input type="hidden" name="project_id" value="{{ project.project_id }}">
+                                        <input type="hidden" name="user_id" value="{{ request.user.id }}">
+                                        <textarea name="message" class="form-control" rows="3" placeholder="Enter your message"></textarea>
+                                        <button type="submit" class="btn btn-dark">Send Message</button>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -222,12 +254,17 @@
         </div>
         <a href="{% url 'back_to_dashboard' %}" class="btn btn-secondary">Go back to dashboard</a>
     </div>
-
+    
     <!-- Comments container floated to the right -->
     <div class="comments-container">
         <!-- Display comments -->
         {% for comment in project.comments.all %}
-        <p>{{ comment.created_by.username }}: {{ comment.content }}</p>
+        <table class="table table-hover"> <tbody>
+            <tr class="table-info">
+                <th scope="row">{{ comment.created_by.username }}: </th>
+                <td> {{ comment.content }}</td>
+            </tr>
+        </tbody></table>
         {% endfor %}
         <!-- Link to comment creation page -->
         <a href="{% url 'add_comment' project_id=project.project_id %}" class="btn btn-info" onclick="showToast('Your comment has been added!', 3000)"><strong>Add Comment</strong></a>

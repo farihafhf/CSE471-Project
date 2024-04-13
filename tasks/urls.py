@@ -22,6 +22,10 @@ urlpatterns = [
     path('complete_task/<int:task_id>/', views.complete_task, name='complete_task'),
     path('project/<int:project_id>/add_comment/', views.add_comment, name='add_comment'),
     path('add_additional_details/<int:task_id>/<int:project_id>/<str:user_name>/', views.add_additional_details, name='add_additional_details'),
+    path('send_message/', views.send_message, name='send_message'),
+    path('mssgs/<int:user_id>/', views.mssgs, name='mssgs'),
+
 ]
+
 
 

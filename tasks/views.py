@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Project, Task, Notice
+from .models import Project, Task, Notice, Message
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from .forms import TimerForm
@@ -135,7 +135,7 @@ def set_deadline(request, project_id, task_id, user_name):
 
         # Create a new notice for the updated deadline
         notice_message = f"The deadline for '{task.task_name}' in '{project.project_name}' has been updated to '{deadline}' for user '{task.assigned_to.username}'.        "
-
+        messages.success(request, f'Task deadline Updated successfully')
         notice = Notice.objects.create(user=task.assigned_to, task=task, project=project, notice=notice_message)
 
         return redirect('project_page', project_id=project_id)
@@ -186,12 +186,12 @@ def add_additional_details(request, project_id, task_id, user_name):
                 notice.notice = f"Task {task.task_name} assigned to {assigned_to_username}"
                 notice.save()
         
-        # Retrieve the user object by username
+        
         assigned_to_user = User.objects.get(username=assigned_to_username)
         task.assigned_to = assigned_to_user
         
         task.save()
-        
+        messages.success(request, f'Task details added successfully!')
         return redirect('project_page', project_id=project_id)
     else:
         return HttpResponse('Invalid request method')
@@ -200,14 +200,19 @@ def add_additional_details(request, project_id, task_id, user_name):
 def notifications(request, user_id):
     user = get_object_or_404(User, id=user_id)
     notifications = Notice.objects.filter(user=user)
-    # Render the notifications.html template with the notifications data
     return render(request, 'notifications.html', {'notifications': notifications})
-
+@login_required
+def mssgs(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    messages = Message.objects.filter(to_user_id=user.id)
+    # Render the notifications.html template with the notifications data
+    return render(request, 'mssgs.html', {'messages': messages})
 
 @login_required
 def complete_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     task.mark_as_complete()
+    messages.success(request, f'Task marked as complete!')
     return redirect('project_page', project_id=task.parent_project_id)
 
 
@@ -225,3 +230,33 @@ def add_comment(request, project_id):
     else:
         form = CommentForm()
     return render(request, 'add_comment.html', {'form': form})
+
+def send_message(request):
+    if request.method == 'POST':
+        recipient_id = request.POST.get('recipient')
+        project_id = request.POST.get('project_id')
+        user_id = request.POST.get('user_id')
+        message_text = request.POST.get('message')
+        
+        try:
+            sender = User.objects.get(id=user_id)
+            recipient = User.objects.get(id=recipient_id)
+            project = Project.objects.get(project_id=project_id)  # Assuming project_id is the primary key of the Project model
+            
+            message = Message.objects.create(
+                from_user=sender,
+                to_user=recipient,
+                related_project=project,
+                message=message_text
+            )
+            
+            
+            messages.success(request, f'Message sent!')
+            
+            
+            return redirect('project_page', project_id=project_id)
+        except Exception as e:
+            # Use Django's messages framework to display an error message
+            messages.error(request, f'An error occurred: {e}')
+            return redirect('project_page',project_id=project_id)  # Redirect to an error page or handle the error accordingly
+

@@ -91,9 +91,13 @@
             <a href="{% url 'notifications' user_id=request.user.id %}" class="btn btn-outline-dark">
               🔔 
             </a>
+            <a href="{% url 'mssgs' user_id=request.user.id %}" class="btn btn-outline-dark">
+              ✉️ 
+            </a>
             <button type="button" style="color: white" class="btn btn-secondary"><a href="/signout" style="color: white;">Sign Out</a></button>
             
         </div>
+
     </div>
 </body>
 </html>
