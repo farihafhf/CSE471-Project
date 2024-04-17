@@ -257,6 +257,7 @@
     
     <!-- Comments container floated to the right -->
     <div class="comments-container">
+        <h2> Comments </h2>
         <!-- Display comments -->
         {% for comment in project.comments.all %}
         <table class="table table-hover"> <tbody>
@@ -274,7 +275,7 @@
     <script src="static\toast-notification.js"></script>
 </body>
 </html>
-<!DOCTYPE html>
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -348,4 +349,4 @@
   </script>
   
 </body>
-</html>
+</html> {% endcomment %}
