@@ -260,3 +260,13 @@ def send_message(request):
             messages.error(request, f'An error occurred: {e}')
             return redirect('project_page',project_id=project_id)  # Redirect to an error page or handle the error accordingly
 
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+def send_email_notification(user_email, task_name, deadline, task_id):
+    subject = f'Deadline for {task_name}'
+    message = f'The deadline for {task_name} is {deadline}. You can view the task at http://127.0.0.1:8000/task/{task_id}'
+    email_from = settings.DEFAULT_FROM_EMAIL
+    recipient_list = [user_email,]
+    send_mail(subject, message, email_from, recipient_list)
