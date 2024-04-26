@@ -271,9 +271,10 @@ def send_message(request):
 
 from .models import Theme
 
-def immersion_mode(request):
+def immersion_mode(request,project_id):
     themes = Theme.objects.all()
-    project = Project.objects.get(created_by=request.user)  # Get the current user's project
+    # project = Project.objects.get(created_by=request.user)# Get the current user's project
+    project = Project.objects.get(project_id=project_id)
     tasks = Task.objects.filter(parent_project=project)  # Get the tasks for the current user's project
     return render(request, 'immersion_mode.html', {'themes': themes, 'tasks': tasks})
 
