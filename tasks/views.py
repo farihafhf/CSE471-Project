@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Project, Task, Notice, Message
+from .models import Project, Task, Notice, Message, Comment
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from .forms import TimerForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import AssignTaskForm
-
+from authentication.models import UserProfile
 from .forms import CommentForm
 @login_required
 def create_project(request):
@@ -231,6 +231,14 @@ def add_comment(request, project_id):
         form = CommentForm()
     return render(request, 'add_comment.html', {'form': form})
 
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.user == comment.created_by:
+        comment.delete()
+    return redirect('project_page', project_id=comment.project.project_id)
+
+
 def send_message(request):
     if request.method == 'POST':
         recipient_id = request.POST.get('recipient')
@@ -259,4 +267,14 @@ def send_message(request):
             # Use Django's messages framework to display an error message
             messages.error(request, f'An error occurred: {e}')
             return redirect('project_page',project_id=project_id)  # Redirect to an error page or handle the error accordingly
+
+
+from .models import Theme
+
+def immersion_mode(request,project_id):
+    themes = Theme.objects.all()
+    #project = Project.objects.get(created_by=request.user)  # Get the current user's project
+    project = Project.objects.get(project_id=project_id)
+    tasks = Task.objects.filter(parent_project=project)  # Get the tasks for the current user's project
+    return render(request, 'immersion_mode.html', {'themes': themes, 'tasks': tasks})
 
