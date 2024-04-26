@@ -268,3 +268,12 @@ def send_message(request):
             messages.error(request, f'An error occurred: {e}')
             return redirect('project_page',project_id=project_id)  # Redirect to an error page or handle the error accordingly
 
+
+from .models import Theme
+
+def immersion_mode(request):
+    themes = Theme.objects.all()
+    project = Project.objects.get(created_by=request.user)  # Get the current user's project
+    tasks = Task.objects.filter(parent_project=project)  # Get the tasks for the current user's project
+    return render(request, 'immersion_mode.html', {'themes': themes, 'tasks': tasks})
+

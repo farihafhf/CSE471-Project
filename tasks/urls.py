@@ -25,6 +25,7 @@ urlpatterns = [
     path('send_message/', views.send_message, name='send_message'),
     path('mssgs/<int:user_id>/', views.mssgs, name='mssgs'),
     path('delete_comment/<int:comment_id>/', views.delete_comment, name='delete_comment'),
+    path('immersion_mode/', views.immersion_mode, name='immersion_mode'),
 
 
 ]

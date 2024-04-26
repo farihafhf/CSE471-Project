@@ -79,3 +79,11 @@ class Message(models.Model):
 
     def __str__(self):
         return f"From: {self.from_user.username} | To: {self.to_user.username} | Project: {self.related_project.project_name}"
+
+
+class Theme(models.Model):
+    name = models.CharField(max_length=200)
+    video = models.FileField(upload_to='themes/')
+
+    def __str__(self):
+        return self.name

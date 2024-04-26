@@ -104,8 +104,26 @@
         .task-name {
             margin-right: 10px; /* Add space between task name and dustbin emoji */
         }
+        .top-right-buttons {
+    position: fixed;
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999; /* Ensure it's above other elements */
+}
+
     </style>
-</head>
+<div class="top-right-buttons">
+    <a href="{% url 'notifications' user_id=request.user.id %}" class="btn btn-outline-dark">
+        🔔 
+    </a>
+    <a href="{% url 'mssgs' user_id=request.user.id %}" class="btn btn-outline-dark">
+        ✉️ 
+    </a>
+    <button type="button" style="color: white" class="btn btn-secondary">
+        <a href="/signout" style="color: white;">Sign Out</a>
+    </button>            
+</div>
+
 <body>
 
     <div class='container'>
@@ -121,6 +139,7 @@
         {% endfor %}
     </div>
 {% endif %}
+
 
         {% for task in project_tasks %}
 <div class="accordion" id="accordionExample">
@@ -271,11 +290,15 @@
             </form>
         </div>
         <a href="{% url 'back_to_dashboard' %}" class="btn btn-secondary">Go back to dashboard</a>
+        <a href="{% url 'immersion_mode' %}" class="btn btn-primary">Immersion Mode</a>
+
 
     </div>
     
 <!-- Comments container floated to the right -->
 <div class="comments-container">
+    <br>
+    <br>
     <!-- Display comments -->
     {% for comment in project.comments.all %}
     <table class="table table-hover"> <tbody>
