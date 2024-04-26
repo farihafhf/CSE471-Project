@@ -1,0 +1,17 @@
+projectenv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+getitdone/__pycache__/
+authentication/__pycache__/*.pyc
+
+
+# Django migrations
+**/migrations/
+
+
+
+
+
