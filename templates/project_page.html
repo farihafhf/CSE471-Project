@@ -271,7 +271,8 @@
             </form>
         </div>
         <a href="{% url 'back_to_dashboard' %}" class="btn btn-secondary">Go back to dashboard</a>
-        <a href="{% url 'immersion_mode' %}" class="btn btn-primary">Immersion Mode</a>
+        <a href="{% url 'immersion_mode' project_id=project.project_id %}" class="btn btn-primary">Immersion Mode</a>
+
 
     </div>
     
