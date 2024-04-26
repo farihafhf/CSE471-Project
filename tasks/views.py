@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Project, Task, Notice, Message
+from .models import Project, Task, Notice, Message, Comment
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from .forms import TimerForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import AssignTaskForm
-
+from authentication.models import UserProfile
+from tasks.models import Theme
 from .forms import CommentForm
 @login_required
 def create_project(request):
@@ -231,6 +232,14 @@ def add_comment(request, project_id):
         form = CommentForm()
     return render(request, 'add_comment.html', {'form': form})
 
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.user == comment.created_by:
+        comment.delete()
+    return redirect('project_page', project_id=comment.project.project_id)
+
+
 def send_message(request):
     if request.method == 'POST':
         recipient_id = request.POST.get('recipient')
@@ -260,13 +269,19 @@ def send_message(request):
             messages.error(request, f'An error occurred: {e}')
             return redirect('project_page',project_id=project_id)  # Redirect to an error page or handle the error accordingly
 
-from django.core.mail import send_mail
-from django.conf import settings
+@login_required
+def update_theme(request):
+    if request.method == 'POST':
+        theme_name = request.POST.get('theme')
+        theme = Theme.objects.get(name=theme_name)
+        user_profile = UserProfile.objects.get(user=request.user)
+        user_profile.theme = theme
+        user_profile.save()
+        return redirect('some_view')
+        
+@login_required
+def your_view(request):
+    themes = Theme.objects.all()  # Get all Theme objects
+    context = {'themes': themes}
+    return render(request, 'project_page.html', context)
 
-
-def send_email_notification(user_email, task_name, deadline, task_id):
-    subject = f'Deadline for {task_name}'
-    message = f'The deadline for {task_name} is {deadline}. You can view the task at http://127.0.0.1:8000/task/{task_id}'
-    email_from = settings.DEFAULT_FROM_EMAIL
-    recipient_list = [user_email,]
-    send_mail(subject, message, email_from, recipient_list)
