@@ -107,10 +107,7 @@
     </style>
 </head>
 <body>
-    
-    <video autoplay loop muted id="bgvideo">
-        <source src="{{ request.user.userprofile.theme.video.url }}" type="video/mp4">
-    </video>
+
     <div class='container'>
         <br>
         <h1>{{ project.project_name }}</h1>
@@ -275,20 +272,6 @@
         </div>
         <a href="{% url 'back_to_dashboard' %}" class="btn btn-secondary">Go back to dashboard</a>
 
-       
-    </div>
-    
-       <!-- Theme selector -->
-    <div class="mb-3">
-        <label for="theme-selector">Choose a theme:</label>
-        <select id="theme-selector">
-            <option value="waves">Waves</option>
-            <option value="valley">Valley</option>
-            <option value="raindrops">Raindrops</option>
-            <option value="clouds">Clouds</option>
-            <option value="green mountains">Green Mountains</option>
-            <option value="sea">Sea</option>
-        </select>
     </div>
     
 <!-- Comments container floated to the right -->
