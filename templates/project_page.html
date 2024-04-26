@@ -290,7 +290,7 @@
             </form>
         </div>
         <a href="{% url 'back_to_dashboard' %}" class="btn btn-secondary">Go back to dashboard</a>
-        <a href="{% url 'immersion_mode' %}" class="btn btn-primary">Immersion Mode</a>
+        <a href="{% url 'immersion_mode' project_id=project.project_id %}" class="btn btn-primary">Immersion Mode</a>
 
 
     </div>
@@ -338,15 +338,15 @@
 
 </body>
 </html>
-{% comment %}
-<!DOCTYPE html>
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Toast Notification</title>
 <style>
-  /* CSS for toast notification */
+ 
   .toast {
     visibility: hidden;
     min-width: 250px;
@@ -387,10 +387,10 @@
 </head>
 <body>
 
-<!-- HTML for toast notification -->
+
 <div id="toast" class="toast"></div>
 
-<!-- JavaScript for toast notification -->
+
 <script>
     function showToast(message, duration) {
       var toast = document.getElementById("toast");
@@ -403,14 +403,14 @@
       localStorage.setItem("toast_message", message);
     }
   
-    // Check if there's a stored toast message
+   
     window.onload = function() {
       var storedMessage = localStorage.getItem("toast_message");
       if (storedMessage) {
-        showToast(storedMessage, 3000); // Change duration here (in milliseconds)
+        showToast(storedMessage, 3000);
       }
     };
   </script>
-    {% endcomment %}
+  
 </body>
-</html>
+</html> -->
