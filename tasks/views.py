@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import AssignTaskForm
 from authentication.models import UserProfile
-from tasks.models import Theme
 from .forms import CommentForm
 @login_required
 def create_project(request):
@@ -268,20 +267,4 @@ def send_message(request):
             # Use Django's messages framework to display an error message
             messages.error(request, f'An error occurred: {e}')
             return redirect('project_page',project_id=project_id)  # Redirect to an error page or handle the error accordingly
-
-@login_required
-def update_theme(request):
-    if request.method == 'POST':
-        theme_name = request.POST.get('theme')
-        theme = Theme.objects.get(name=theme_name)
-        user_profile = UserProfile.objects.get(user=request.user)
-        user_profile.theme = theme
-        user_profile.save()
-        return redirect('some_view')
-        
-@login_required
-def your_view(request):
-    themes = Theme.objects.all()  # Get all Theme objects
-    context = {'themes': themes}
-    return render(request, 'project_page.html', context)
 
